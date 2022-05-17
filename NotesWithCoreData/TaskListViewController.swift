@@ -9,7 +9,8 @@ import UIKit
 
 
 class TaskListViewController: UITableViewController {
-    private let viewContext = StorageManager.shared.persistentContainer.viewContext
+    
+    
     private var noteList: [Note] = []
     private let noteID = "note"
 
@@ -49,51 +50,50 @@ class TaskListViewController: UITableViewController {
     }
     
    @objc private func addNewTask() {
-      showAlert("NewNote", "What do you want to do?")
+      showAlert()
     }
     
-    private func fetchData(){
-        let fetchRequest = Note.fetchRequest()
-        do{
-        noteList = try StorageManager.shared.persistentContainer.viewContext.fetch(fetchRequest)
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
     
-    private func showAlert(_ title: String, _ message: String){
+    private func EditShowAlert(_ title: String, _ message: String){
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
+        let editAction = UIAlertAction(title: "Update", style: .default) { _ in
             guard let note = alert.textFields?.first?.text, !note.isEmpty else {return}
             self.save(note)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
-        alert.addAction(saveAction)
+        alert.addAction(editAction)
         alert.addAction(cancelAction)
         alert.addTextField { textField in
-            textField.placeholder = "New Task"
+            textField.placeholder = "Update Task"
         }
         present(alert,animated: true)
        
     }
     
+    
     private func save(_ noteName: String){
-        let note = Note(context: viewContext)
-        note.title = noteName
-        noteList.append(note)
+        StorageManager.shared.create(noteName) { note in
+            self.noteList.append(note)
+            self.tableView.insertRows(
+                at: [IndexPath(row: self.noteList.count - 1, section: 0)],
+                with: .automatic
+            )
+        }
         
-        let cellIndex = IndexPath(row: noteList.count - 1, section: 0)
-        tableView.insertRows(at: [cellIndex], with: .automatic)
-        if viewContext.hasChanges {
-            do{
-                try viewContext.save()
-            } catch {
+        
+    }
+    
+    private func fetchData() {
+        StorageManager.shared.fetchData { result in
+            switch result {
+            case .success(let notes):
+                self.noteList = notes
+            case .failure(let error):
                 print(error.localizedDescription)
             }
         }
-        
     }
-                                                        
+                                                
 }
 
 
@@ -109,5 +109,47 @@ extension TaskListViewController {
         cell.contentConfiguration = content
         return cell
     }
+
 }
+
+extension TaskListViewController {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let note = noteList[indexPath.row]
+        showAlert(note: note) {
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
+    // Delete task
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let note = noteList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            StorageManager.shared.delete(note)
+        }
+    }
+}
+
+// MARK: - Alert Controller
+extension TaskListViewController {
+    private func showAlert(note: Note? = nil, completion: (() -> Void)? = nil) {
+        let title = note != nil ? "Update Task" : "New Task"
+        let alert = UIAlertController.createAlertController(withTitle: title)
+        
+        alert.action(note: note) { noteName in
+            if let note = note, let completion = completion {
+                StorageManager.shared.update(note, newName: noteName)
+                completion()
+            } else {
+                self.save(noteName)
+            }
+        }
+        
+        present(alert, animated: true)
+    }
+}
+
+
+
 

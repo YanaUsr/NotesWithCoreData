@@ -14,6 +14,7 @@
 		23065DA828314BF900549956 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23065DA728314BF900549956 /* Assets.xcassets */; };
 		23065DAB28314BF900549956 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23065DA928314BF900549956 /* LaunchScreen.storyboard */; };
 		23065DB328314DEB00549956 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23065DB228314DEB00549956 /* StorageManager.swift */; };
+		233B55D92832DF80004D6B28 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233B55D82832DF80004D6B28 /* AlertController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		23065DAA28314BF900549956 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		23065DAC28314BF900549956 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		23065DB228314DEB00549956 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		233B55D82832DF80004D6B28 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 				23065D9D28314BF900549956 /* SceneDelegate.swift */,
 				23065D9F28314BF900549956 /* TaskListViewController.swift */,
 				23065DB228314DEB00549956 /* StorageManager.swift */,
+				233B55D82832DF80004D6B28 /* AlertController.swift */,
 				23065DA728314BF900549956 /* Assets.xcassets */,
 				23065DA928314BF900549956 /* LaunchScreen.storyboard */,
 				23065DAC28314BF900549956 /* Info.plist */,
@@ -144,6 +147,7 @@
 				23065D9C28314BF900549956 /* AppDelegate.swift in Sources */,
 				23065DB328314DEB00549956 /* StorageManager.swift in Sources */,
 				23065DA628314BF900549956 /* NotesWithCoreData.xcdatamodeld in Sources */,
+				233B55D92832DF80004D6B28 /* AlertController.swift in Sources */,
 				23065D9E28314BF900549956 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
